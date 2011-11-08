@@ -32,17 +32,17 @@ class HT1632 {
   void clrPixel(uint8_t x, uint8_t y);
   void setPixel(uint8_t x, uint8_t y);
 
+  void clrPixel(uint16_t i);
+  void setPixel(uint16_t i);
+
+  void blink(boolean state);
+  void setBrightness(uint8_t pwm);
+
   void clearScreen();
   void fillScreen();
   void writeScreen();
   void dumpScreen();
-
-  /*
-  void blink(void);
-  void blinkOff(void);
-
-  void setBrightness(uint8_t pwm);
-  */
+  
  private:
   int8_t WIDTH, HEIGHT;
   int8_t _data, _cs, _wr, _rd;

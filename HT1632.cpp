@@ -36,6 +36,17 @@ void HT1632::begin(uint8_t type) {
   HEIGHT = 16;
 }
 
+void HT1632::setBrightness(uint8_t pwm) {
+  if (pwm > 15) pwm = 15;
+  sendcommand(HT1632_PWM_CONTROL | pwm);
+}
+
+void HT1632::blink(boolean blinky) {
+  if (blinky) 
+    sendcommand(HT1632_BLINK_ON);
+  else
+    sendcommand(HT1632_BLINK_OFF);
+}
 
 void HT1632::clrPixel(uint8_t x, uint8_t y) {
   ledmatrix[(y*WIDTH+x) / 8] &= ~_BV(7 - (y*WIDTH+x) % 8);
@@ -43,6 +54,14 @@ void HT1632::clrPixel(uint8_t x, uint8_t y) {
 
 void HT1632::setPixel(uint8_t x, uint8_t y) {
   ledmatrix[(y*WIDTH+x) / 8] |= _BV(7 - (y*WIDTH+x) % 8);
+}
+
+void HT1632::setPixel(uint16_t i) {
+  ledmatrix[i/8] |= _BV(i%8); 
+}
+
+void HT1632::clrPixel(uint16_t i) {
+  ledmatrix[i/8] &= ~_BV(i%8); 
 }
 
 void HT1632::dumpScreen() {
