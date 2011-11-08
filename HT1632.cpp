@@ -6,22 +6,55 @@ HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1) {
 
   matrices[0] = HT1632(data, wr, cs1);
   matrixNum  = 1;
-  _width = 24;
+  _width = 24 * matrixNum;
   _height = 16;
 }
 
-HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1, uint8_t cs2) {
+HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, 
+				 uint8_t cs1, uint8_t cs2) {
   matrices = (HT1632 *)malloc(2 * sizeof(HT1632));
 
   matrices[0] = HT1632(data, wr, cs1);
   matrices[1] = HT1632(data, wr, cs2);
   matrixNum  = 2;
-  _width = 48;
+  _width = 24 * matrixNum;
   _height = 16;
 }
 
+HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, 
+				 uint8_t cs1, uint8_t cs2, uint8_t cs3) {
+  matrices = (HT1632 *)malloc(3 * sizeof(HT1632));
+
+  matrices[0] = HT1632(data, wr, cs1);
+  matrices[1] = HT1632(data, wr, cs2);
+  matrices[2] = HT1632(data, wr, cs3);
+  matrixNum  = 3;
+  _width = 24 * matrixNum;
+  _height = 16;
+}
+
+HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, 
+				 uint8_t cs1, uint8_t cs2, 
+				 uint8_t cs3, uint8_t cs4) {
+  matrices = (HT1632 *)malloc(4 * sizeof(HT1632));
+
+  matrices[0] = HT1632(data, wr, cs1);
+  matrices[1] = HT1632(data, wr, cs2);
+  matrices[2] = HT1632(data, wr, cs3);
+  matrices[3] = HT1632(data, wr, cs4);
+  matrixNum  = 4;
+  _width = 24 * matrixNum;
+  _height = 16;
+}
 
 void HT1632LEDMatrix::setPixel(uint8_t x, uint8_t y) {
+  drawPixel(x, y, 1);
+}
+void HT1632LEDMatrix::clrPixel(uint8_t x, uint8_t y) {
+  drawPixel(x, y, 0);
+}
+
+void HT1632LEDMatrix::drawPixel(uint8_t x, uint8_t y, uint8_t color) {
   if (y >= _height) return;
   if (x >= _width) return;
 
@@ -49,7 +82,10 @@ void HT1632LEDMatrix::setPixel(uint8_t x, uint8_t y) {
 
   i += y * 8;
 
-  matrices[m].setPixel(i);
+  if (color) 
+    matrices[m].setPixel(i);
+  else
+    matrices[m].clrPixel(i);
 }
 
 
