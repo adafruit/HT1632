@@ -51,3 +51,18 @@ class HT1632 {
   void writedata(uint16_t d, uint8_t bits);
   void writeRAM(uint8_t addr, uint8_t data);
 };
+
+class HT1632LEDMatrix {
+ public:
+  HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1);
+  // HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1, uint8_t cs2);
+  //HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1, uint8_t cs, uint8_t cs3);
+  //HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1, uint8_t cs2, uint8_t cs3, uint8_t cs4);
+
+
+ private:
+  HT1632 *matrices;
+
+
+
+};

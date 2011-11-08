@@ -1,7 +1,18 @@
 #include <WProgram.h>
 #include "HT1632.h"
 
- HT1632::HT1632(int8_t data, int8_t wr, int8_t cs, int8_t rd) {
+HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1) {
+  matrices = (HT1632 *)malloc(sizeof(HT1632));
+
+  matrices[0] = HT1632(data, wr, cs1);
+
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+
+
+HT1632::HT1632(int8_t data, int8_t wr, int8_t cs, int8_t rd) {
   _data = data;
   _wr = wr;
   _cs = cs;
