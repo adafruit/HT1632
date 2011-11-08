@@ -204,10 +204,18 @@ Serial.println("---------------------------------------");
 }
 
 void HT1632::writeScreen() {
+
+  digitalWrite(_cs, LOW);
+
+  writedata(HT1632_WRITE, 3);
+  // send with address 0
+  writedata(0, 7);
+
   for (uint16_t i=0; i<(WIDTH*HEIGHT/8); i++) {
-    writeRAM(2*i, ledmatrix[i] >> 4);
-    writeRAM(2*i+1, ledmatrix[i] & 0xF);
+    writedata(ledmatrix[i] >> 4, 4);
+    writedata(ledmatrix[i] & 0xF, 4);
   }
+  digitalWrite(_cs, HIGH);
 }
 
 
