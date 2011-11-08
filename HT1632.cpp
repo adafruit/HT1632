@@ -5,9 +5,97 @@ HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1) {
   matrices = (HT1632 *)malloc(sizeof(HT1632));
 
   matrices[0] = HT1632(data, wr, cs1);
-
+  matrixNum  = 1;
+  _width = 24;
+  _height = 16;
 }
 
+HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1, uint8_t cs2) {
+  matrices = (HT1632 *)malloc(2 * sizeof(HT1632));
+
+  matrices[0] = HT1632(data, wr, cs1);
+  matrices[1] = HT1632(data, wr, cs2);
+  matrixNum  = 2;
+  _width = 48;
+  _height = 16;
+}
+
+
+void HT1632LEDMatrix::setPixel(uint8_t x, uint8_t y) {
+  if (y >= _height) return;
+  if (x >= _width) return;
+
+  uint8_t m;
+  // figure out which matrix controller it is
+  m = x / 24;
+  x %= 24;
+
+  uint16_t i;
+
+  if (x < 8) {
+    i = 7;
+  } else if (x < 16) {
+    i = 128 + 7;
+  } else {
+    i = 256 + 7;
+  }
+  i -= (x % 8);
+
+  if (y < 8) {
+    y *= 2;
+  } else {
+    y = (y-8) * 2 + 1;
+  } 
+
+  i += y * 8;
+
+  matrices[m].setPixel(i);
+}
+
+
+uint8_t HT1632LEDMatrix::width() {
+  return _width;
+}
+
+uint8_t HT1632LEDMatrix::height() {
+  return _height;
+}
+
+void HT1632LEDMatrix::begin(uint8_t type) {
+  for (uint8_t i=0; i<matrixNum; i++) {
+    matrices[i].begin(type);
+  }
+}
+
+void HT1632LEDMatrix::clearScreen() {
+  for (uint8_t i=0; i<matrixNum; i++) {
+    matrices[i].clearScreen();
+  }
+}
+
+void HT1632LEDMatrix::fillScreen() {
+  for (uint8_t i=0; i<matrixNum; i++) {
+    matrices[i].fillScreen();
+  }
+}
+
+void HT1632LEDMatrix::setBrightness(uint8_t b) {
+  for (uint8_t i=0; i<matrixNum; i++) {
+    matrices[i].setBrightness(b);
+  }
+}
+
+void HT1632LEDMatrix::blink(boolean b) {
+  for (uint8_t i=0; i<matrixNum; i++) {
+    matrices[i].blink(b);
+  }
+}
+
+void HT1632LEDMatrix::writeScreen() {
+  for (uint8_t i=0; i<matrixNum; i++) {
+    matrices[i].writeScreen();
+  }
+}
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -57,14 +145,6 @@ void HT1632::blink(boolean blinky) {
     sendcommand(HT1632_BLINK_ON);
   else
     sendcommand(HT1632_BLINK_OFF);
-}
-
-void HT1632::clrPixel(uint8_t x, uint8_t y) {
-  ledmatrix[(y*WIDTH+x) / 8] &= ~_BV(7 - (y*WIDTH+x) % 8);
-}
-
-void HT1632::setPixel(uint8_t x, uint8_t y) {
-  ledmatrix[(y*WIDTH+x) / 8] |= _BV(7 - (y*WIDTH+x) % 8);
 }
 
 void HT1632::setPixel(uint16_t i) {

@@ -28,10 +28,6 @@ class HT1632 {
 
   void begin(uint8_t type);
   
-
-  void clrPixel(uint8_t x, uint8_t y);
-  void setPixel(uint8_t x, uint8_t y);
-
   void clrPixel(uint16_t i);
   void setPixel(uint16_t i);
 
@@ -55,14 +51,23 @@ class HT1632 {
 class HT1632LEDMatrix {
  public:
   HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1);
-  // HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1, uint8_t cs2);
+  HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1, uint8_t cs2);
   //HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1, uint8_t cs, uint8_t cs3);
   //HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1, uint8_t cs2, uint8_t cs3, uint8_t cs4);
 
+ void begin(uint8_t type);
+ void clearScreen(void);
+ void fillScreen(void);
+ void blink(boolean b);
+ void setBrightness(uint8_t brightness);
+ void writeScreen();
+ uint8_t width();
+ uint8_t height();
+
+ // void clrPixel(uint8_t x, uint8_t y);
+  void setPixel(uint8_t x, uint8_t y);
 
  private:
   HT1632 *matrices;
-
-
-
+  uint8_t matrixNum, _width, _height;
 };
