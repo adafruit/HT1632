@@ -211,9 +211,12 @@ void HT1632::writeScreen() {
   // send with address 0
   writedata(0, 7);
 
-  for (uint16_t i=0; i<(WIDTH*HEIGHT/8); i++) {
-    writedata(ledmatrix[i] >> 4, 4);
-    writedata(ledmatrix[i] & 0xF, 4);
+  for (uint16_t i=0; i<(WIDTH*HEIGHT/8); i+=2) {
+    uint16_t d = ledmatrix[i];
+    d <<= 8;
+    d |= ledmatrix[i+1];
+
+    writedata(d, 16);
   }
   digitalWrite(_cs, HIGH);
 }
@@ -228,11 +231,9 @@ void HT1632::clearScreen() {
 
 
 void HT1632::writedata(uint16_t d, uint8_t bits) {
-  //Serial.println(d, HEX);
   pinMode(_data, OUTPUT);
   for (uint8_t i=bits; i > 0; i--) {
     digitalWrite(_wr, LOW);
-   //Serial.println(_BV(i-1), HEX);
    if (d & _BV(i-1)) {
      digitalWrite(_data, HIGH);
    } else {
