@@ -6,9 +6,9 @@
 #define CS2  5
 
 // use this line for single matrix
-//HT1632LEDMatrix matrix = HT1632LEDMatrix(DATA, WR, CS);
+HT1632LEDMatrix matrix = HT1632LEDMatrix(DATA, WR, CS);
 // use this line for two matrices!
-HT1632LEDMatrix matrix = HT1632LEDMatrix(DATA, WR, CS, CS2);
+//HT1632LEDMatrix matrix = HT1632LEDMatrix(DATA, WR, CS, CS2);
 
 void setup() {
   Serial.begin(9600);

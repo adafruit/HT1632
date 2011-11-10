@@ -83,6 +83,9 @@ class HT1632LEDMatrix : public Print {
   void write(uint8_t c);
   void drawChar(uint8_t x, uint8_t y, char c, uint16_t color, uint8_t size);
 
+  void drawBitmap(uint8_t x, uint8_t y, 
+		  const uint8_t *bitmap, uint8_t w, uint8_t h,
+		  uint8_t color);
 
 
  private:
