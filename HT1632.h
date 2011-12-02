@@ -1,4 +1,8 @@
-#include <WProgram.h>
+#if(ARDUINO >= 100)
+ #include <Arduino.h>
+#else
+ #include <WProgram.h>
+#endif
 
 #define HT1632_READ  0x6
 #define HT1632_WRITE 0x5
@@ -80,7 +84,11 @@ class HT1632LEDMatrix : public Print {
   void setCursor(uint8_t x, uint8_t y);
   void setTextSize(uint8_t s);
   void setTextColor(uint8_t c);
+#if(ARDUINO >= 100)
+  size_t write(uint8_t c);
+#else
   void write(uint8_t c);
+#endif
   void drawChar(uint8_t x, uint8_t y, char c, uint16_t color, uint8_t size);
 
   void drawBitmap(uint8_t x, uint8_t y, 

@@ -1,4 +1,3 @@
-#include <WProgram.h>
 #include "HT1632.h"
 #include "glcdfont.c"
 
@@ -278,7 +277,11 @@ void HT1632LEDMatrix::setTextColor(uint8_t c) {
   textcolor = c;
 }
 
+#if (ARDUINO >= 100)
+size_t HT1632LEDMatrix::write(uint8_t c) {
+#else
 void HT1632LEDMatrix::write(uint8_t c) {
+#endif
   if (c == '\n') {
     cursor_y += textsize*8;
     cursor_x = 0;
