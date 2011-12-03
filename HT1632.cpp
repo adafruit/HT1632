@@ -277,7 +277,7 @@ void HT1632LEDMatrix::setTextColor(uint8_t c) {
   textcolor = c;
 }
 
-#if (ARDUINO >= 100)
+#if ARDUINO >= 100
 size_t HT1632LEDMatrix::write(uint8_t c) {
 #else
 void HT1632LEDMatrix::write(uint8_t c) {
@@ -291,6 +291,9 @@ void HT1632LEDMatrix::write(uint8_t c) {
     drawChar(cursor_x, cursor_y, c, textcolor, textsize);
     cursor_x += textsize*6;
   }
+#if ARDUINO >= 100
+  return 1;
+#endif
 }
 
 
@@ -384,7 +387,8 @@ void HT1632::clrPixel(uint16_t i) {
 }
 
 void HT1632::dumpScreen() {
-Serial.println("---------------------------------------");
+  Serial.println("---------------------------------------");
+
   for (uint16_t i=0; i<(WIDTH*HEIGHT/8); i++) {
     Serial.print("0x");
     Serial.print(ledmatrix[i], HEX);
@@ -455,7 +459,7 @@ void HT1632::writeRAM(uint8_t addr, uint8_t data) {
 }
 
 
-uint8_t HT1632::sendcommand(uint8_t cmd) {
+void HT1632::sendcommand(uint8_t cmd) {
   uint16_t data = 0;
   data = HT1632_COMMAND;
   data <<= 8;

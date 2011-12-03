@@ -47,7 +47,7 @@ class HT1632 {
   int8_t WIDTH, HEIGHT;
   int8_t _data, _cs, _wr, _rd;
   uint8_t ledmatrix[48];     // 16 * 24 / 8
-  uint8_t sendcommand(uint8_t c);
+  void sendcommand(uint8_t c);
   void writedata(uint16_t d, uint8_t bits);
   void writeRAM(uint8_t addr, uint8_t data);
 };
