@@ -60,6 +60,16 @@ class HT1632LEDMatrix : public Print {
 		  uint8_t cs, uint8_t cs3);
   HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1, 
 		  uint8_t cs2, uint8_t cs3, uint8_t cs4);
+  HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1, 
+		  uint8_t cs2, uint8_t cs3, uint8_t cs4, uint8_t cs5);
+  HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1, 
+		  uint8_t cs2, uint8_t cs3, uint8_t cs4, uint8_t cs5, uint8_t cs6);
+  HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1, 
+		  uint8_t cs2, uint8_t cs3, uint8_t cs4, uint8_t cs5, uint8_t cs6,
+		  uint8_t cs7);
+  HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1, 
+		  uint8_t cs2, uint8_t cs3, uint8_t cs4, uint8_t cs5, uint8_t cs6,
+		  uint8_t cs7, uint8_t cs8);
 
  void begin(uint8_t type);
  void clearScreen(void);
