@@ -34,6 +34,8 @@ class HT1632 {
   
   void clrPixel(uint16_t i);
   void setPixel(uint16_t i);
+  void clrPixel(uint8_t x, uint8_t y);
+  void setPixel(uint8_t x, uint8_t y);
 
   void blink(boolean state);
   void setBrightness(uint8_t pwm);
@@ -43,10 +45,18 @@ class HT1632 {
   void writeScreen();
   void dumpScreen();
   
+  uint8_t width() const;
+  uint8_t height() const;
+  
  private:
   int8_t WIDTH, HEIGHT;
   int8_t _data, _cs, _wr, _rd;
-  uint8_t ledmatrix[48];     // 16 * 24 / 8
+  
+  // There are two configurations: 16 * 24, and 8 * 32.
+  // So we choose the larger one.
+  // Maths: (screen size) / sizeof(uint8_t) = (16 / 24) / 8
+  uint8_t ledmatrix[48];
+  
   void sendcommand(uint8_t c);
   void writedata(uint16_t d, uint8_t bits);
   void writeRAM(uint8_t addr, uint8_t data);

@@ -9,8 +9,8 @@ HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1) {
 
   matrices[0] = HT1632(data, wr, cs1);
   matrixNum  = 1;
-  _width = 24 * matrixNum;
-  _height = 16;
+  _width = 32;
+  _height = 8 * matrixNum;
 }
 
 HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, 
@@ -20,8 +20,8 @@ HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr,
   matrices[0] = HT1632(data, wr, cs1);
   matrices[1] = HT1632(data, wr, cs2);
   matrixNum  = 2;
-  _width = 24 * matrixNum;
-  _height = 16;
+  _width = 32;
+  _height = 8 * matrixNum;
 }
 
 HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, 
@@ -61,8 +61,16 @@ void HT1632LEDMatrix::clrPixel(uint8_t x, uint8_t y) {
 void HT1632LEDMatrix::drawPixel(uint8_t x, uint8_t y, uint8_t color) {
   if (y >= _height) return;
   if (x >= _width) return;
+  
+  uint8_t module;
+  module = y / matrices[0].height();
+  
+  if (color)
+    matrices[module].setPixel(x, y % matrices[0].height());
+  else
+    matrices[module].clrPixel(x, y % matrices[0].height());
 
-  uint8_t m;
+  /*uint8_t m;
   // figure out which matrix controller it is
   m = x / 24;
   x %= 24;
@@ -89,7 +97,7 @@ void HT1632LEDMatrix::drawPixel(uint8_t x, uint8_t y, uint8_t color) {
   if (color) 
     matrices[m].setPixel(i);
   else
-    matrices[m].clrPixel(i);
+    matrices[m].clrPixel(i);*/
 }
 
 
@@ -340,6 +348,9 @@ HT1632::HT1632(int8_t data, int8_t wr, int8_t cs, int8_t rd) {
   for (uint8_t i=0; i<48; i++) {
     ledmatrix[i] = 0;
   }
+  
+  WIDTH = 0;
+  HEIGHT = 0;
 }
 
 void HT1632::begin(uint8_t type) {
@@ -362,8 +373,23 @@ void HT1632::begin(uint8_t type) {
   sendcommand(type);
   sendcommand(HT1632_PWM_CONTROL | 0xF);
   
-  WIDTH = 24;
-  HEIGHT = 16;
+  if (type == HT1632_COMMON_16NMOS || 
+      type == HT1632_COMMON_16PMOS)
+  {
+    WIDTH = 24;
+    HEIGHT = 16;
+  } else {
+    WIDTH = 32;
+    HEIGHT = 8;
+  }
+}
+
+uint8_t HT1632::width() const {
+  return WIDTH;
+}
+
+uint8_t HT1632::height() const {
+  return HEIGHT;
 }
 
 void HT1632::setBrightness(uint8_t pwm) {
@@ -384,6 +410,16 @@ void HT1632::setPixel(uint16_t i) {
 
 void HT1632::clrPixel(uint16_t i) {
   ledmatrix[i/8] &= ~_BV(i%8); 
+}
+
+void HT1632::setPixel(uint8_t x, uint8_t y) {
+  uint8_t x_panel = x / 8;
+  setPixel((7 - (x%8)) + (x_panel * (8*8)) + (y * 8));
+}
+
+void HT1632::clrPixel(uint8_t x, uint8_t y) {
+  uint8_t x_panel = x / 8;
+  clrPixel((7 - (x%8)) + (x_panel * (8*8)) + (y * 8));
 }
 
 void HT1632::dumpScreen() {
