@@ -4,50 +4,42 @@
 
 #define swap(a, b) { uint16_t t = a; a = b; b = t; }
 
-HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1) {
+HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1)
+: _width(0), _height(0), matrixNum(1) {
   matrices = (HT1632 *)malloc(sizeof(HT1632));
 
   matrices[0] = HT1632(data, wr, cs1);
-  matrixNum  = 1;
-  _width = 32;
-  _height = 8 * matrixNum;
 }
 
 HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, 
-				 uint8_t cs1, uint8_t cs2) {
-  matrices = (HT1632 *)malloc(2 * sizeof(HT1632));
+				 uint8_t cs1, uint8_t cs2)
+: _width(0), _height(0), matrixNum(2) {
+  matrices = (HT1632 *)malloc(matrixNum * sizeof(HT1632));
 
   matrices[0] = HT1632(data, wr, cs1);
   matrices[1] = HT1632(data, wr, cs2);
-  matrixNum  = 2;
-  _width = 32;
-  _height = 8 * matrixNum;
 }
 
 HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, 
-				 uint8_t cs1, uint8_t cs2, uint8_t cs3) {
-  matrices = (HT1632 *)malloc(3 * sizeof(HT1632));
+				 uint8_t cs1, uint8_t cs2, uint8_t cs3)
+: _width(0), _height(0), matrixNum(3) {
+  matrices = (HT1632 *)malloc(matrixNum * sizeof(HT1632));
 
   matrices[0] = HT1632(data, wr, cs1);
   matrices[1] = HT1632(data, wr, cs2);
   matrices[2] = HT1632(data, wr, cs3);
-  matrixNum  = 3;
-  _width = 24 * matrixNum;
-  _height = 16;
 }
 
 HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, 
 				 uint8_t cs1, uint8_t cs2, 
-				 uint8_t cs3, uint8_t cs4) {
-  matrices = (HT1632 *)malloc(4 * sizeof(HT1632));
+				 uint8_t cs3, uint8_t cs4) 
+: _width(0), _height(0), matrixNum(4) {
+  matrices = (HT1632 *)malloc(matrixNum * sizeof(HT1632));
 
   matrices[0] = HT1632(data, wr, cs1);
   matrices[1] = HT1632(data, wr, cs2);
   matrices[2] = HT1632(data, wr, cs3);
   matrices[3] = HT1632(data, wr, cs4);
-  matrixNum  = 4;
-  _width = 24 * matrixNum;
-  _height = 16;
 }
 
 
@@ -63,41 +55,19 @@ void HT1632LEDMatrix::drawPixel(uint8_t x, uint8_t y, uint8_t color) {
   if (x >= _width) return;
   
   uint8_t module;
-  module = y / matrices[0].height();
+  
+  // Detect if we are extending down or accross with our modules
+  if (_height > matrices[0].height())
+    module = y / matrices[0].height();
+  else
+    module = x / matrices[0].width();
   
   if (color)
-    matrices[module].setPixel(x, y % matrices[0].height());
+    matrices[module].setPixel(x % matrices[0].width(),
+      y % matrices[0].height());
   else
-    matrices[module].clrPixel(x, y % matrices[0].height());
-
-  /*uint8_t m;
-  // figure out which matrix controller it is
-  m = x / 24;
-  x %= 24;
-
-  uint16_t i;
-
-  if (x < 8) {
-    i = 7;
-  } else if (x < 16) {
-    i = 128 + 7;
-  } else {
-    i = 256 + 7;
-  }
-  i -= (x % 8);
-
-  if (y < 8) {
-    y *= 2;
-  } else {
-    y = (y-8) * 2 + 1;
-  } 
-
-  i += y * 8;
-
-  if (color) 
-    matrices[m].setPixel(i);
-  else
-    matrices[m].clrPixel(i);*/
+    matrices[module].clrPixel(x % matrices[0].width(),
+      y % matrices[0].height());
 }
 
 
@@ -109,9 +79,16 @@ uint8_t HT1632LEDMatrix::height() {
   return _height;
 }
 
-void HT1632LEDMatrix::begin(uint8_t type) {
+void HT1632LEDMatrix::begin(uint8_t type, uint8_t extension) {
   for (uint8_t i=0; i<matrixNum; i++) {
     matrices[i].begin(type);
+  }
+  if (extension == HT1632_EXT_HORIZONTAL) {
+    _width = matrices[0].width() * matrixNum;
+    _height = matrices[0].height();
+  } else {
+    _width = matrices[0].width();
+    _height = matrices[0].height() * matrixNum;
   }
 }
 

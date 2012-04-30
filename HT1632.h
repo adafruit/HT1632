@@ -20,10 +20,19 @@
 #define HT1632_EXT_CLK 0x1C
 #define HT1632_PWM_CONTROL 0xA0
 
+//--- Types for use in begin()
+// 32 * 8 (Negative common)
 #define HT1632_COMMON_8NMOS  0x20
+// 16 * 24 (Negative common)
 #define HT1632_COMMON_16NMOS  0x24
+// 32 * 8 (Positive common)
 #define HT1632_COMMON_8PMOS  0x28
+// 16 * 24 (Positive common)
 #define HT1632_COMMON_16PMOS  0x2C
+
+//--- Extension mode for use in begin()
+#define HT1632_EXT_VERTICAL 0
+#define HT1632_EXT_HORIZONTAL 1
 
 class HT1632 {
 
@@ -71,7 +80,7 @@ class HT1632LEDMatrix : public Print {
   HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1, 
 		  uint8_t cs2, uint8_t cs3, uint8_t cs4);
 
- void begin(uint8_t type);
+ void begin(uint8_t type, uint8_t extension = HT1632_EXT_HORIZONTAL);
  void clearScreen(void);
  void fillScreen(void);
  void blink(boolean b);
