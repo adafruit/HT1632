@@ -1,3 +1,6 @@
+#ifndef HT1632_H_
+#define HT1632_H_
+
 #if(ARDUINO >= 100)
  #include <Arduino.h>
 #else
@@ -101,3 +104,6 @@ class HT1632LEDMatrix : public Print {
   uint8_t matrixNum, _width, _height;
   uint8_t cursor_x, cursor_y, textsize, textcolor;
 };
+
+
+#endif /* HT1632_H_ */
