@@ -50,6 +50,78 @@ HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr,
   _height = 16;
 }
 
+HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, 
+				 uint8_t cs1, uint8_t cs2, 
+				 uint8_t cs3, uint8_t cs4,
+				 uint8_t cs5) {
+  matrices = (HT1632 *)malloc(5 * sizeof(HT1632));
+
+  matrices[0] = HT1632(data, wr, cs1);
+  matrices[1] = HT1632(data, wr, cs2);
+  matrices[2] = HT1632(data, wr, cs3);
+  matrices[3] = HT1632(data, wr, cs4);
+  matrices[4] = HT1632(data, wr, cs5);
+  matrixNum  = 5;
+  _width = 24 * matrixNum;
+  _height = 16;
+}
+
+HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, 
+				 uint8_t cs1, uint8_t cs2, 
+				 uint8_t cs3, uint8_t cs4,
+				 uint8_t cs5, uint8_t cs6) {
+  matrices = (HT1632 *)malloc(6 * sizeof(HT1632));
+
+  matrices[0] = HT1632(data, wr, cs1);
+  matrices[1] = HT1632(data, wr, cs2);
+  matrices[2] = HT1632(data, wr, cs3);
+  matrices[3] = HT1632(data, wr, cs4);
+  matrices[4] = HT1632(data, wr, cs5);
+  matrices[5] = HT1632(data, wr, cs6);
+  matrixNum  = 6;
+  _width = 24 * matrixNum;
+  _height = 16;
+}
+
+HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, 
+				 uint8_t cs1, uint8_t cs2, 
+				 uint8_t cs3, uint8_t cs4,
+				 uint8_t cs5, uint8_t cs6,
+				 uint8_t cs7) {
+  matrices = (HT1632 *)malloc(7 * sizeof(HT1632));
+
+  matrices[0] = HT1632(data, wr, cs1);
+  matrices[1] = HT1632(data, wr, cs2);
+  matrices[2] = HT1632(data, wr, cs3);
+  matrices[3] = HT1632(data, wr, cs4);
+  matrices[4] = HT1632(data, wr, cs5);
+  matrices[5] = HT1632(data, wr, cs6);
+  matrices[6] = HT1632(data, wr, cs7);
+  matrixNum  = 7;
+  _width = 24 * matrixNum;
+  _height = 16;
+}
+
+HT1632LEDMatrix::HT1632LEDMatrix(uint8_t data, uint8_t wr, 
+				 uint8_t cs1, uint8_t cs2, 
+				 uint8_t cs3, uint8_t cs4,
+				 uint8_t cs5, uint8_t cs6,
+				 uint8_t cs7, uint8_t cs8) {
+  matrices = (HT1632 *)malloc(8 * sizeof(HT1632));
+
+  matrices[0] = HT1632(data, wr, cs1);
+  matrices[1] = HT1632(data, wr, cs2);
+  matrices[2] = HT1632(data, wr, cs3);
+  matrices[3] = HT1632(data, wr, cs4);
+  matrices[4] = HT1632(data, wr, cs5);
+  matrices[5] = HT1632(data, wr, cs6);
+  matrices[6] = HT1632(data, wr, cs7);
+  matrices[7] = HT1632(data, wr, cs8);
+  matrixNum  = 8;
+  _width = 24 * matrixNum;
+  _height = 16;
+}
+
 
 void HT1632LEDMatrix::setPixel(uint8_t x, uint8_t y) {
   drawPixel(x, y, 1);
@@ -419,7 +491,7 @@ void HT1632::writeScreen() {
 
 
 void HT1632::clearScreen() {
-  for (uint8_t i=0; i<(WIDTH*HEIGHT/8); i++) {
+  for (uint16_t i=0; i<(WIDTH*HEIGHT/8); i++) {
     ledmatrix[i] = 0;
   }
   writeScreen();
