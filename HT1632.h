@@ -23,10 +23,19 @@
 #define HT1632_EXT_CLK 0x1C
 #define HT1632_PWM_CONTROL 0xA0
 
+//--- Types for use in begin()
+// 32 * 8 (Negative common)
 #define HT1632_COMMON_8NMOS  0x20
+// 16 * 24 (Negative common)
 #define HT1632_COMMON_16NMOS  0x24
+// 32 * 8 (Positive common)
 #define HT1632_COMMON_8PMOS  0x28
+// 16 * 24 (Positive common)
 #define HT1632_COMMON_16PMOS  0x2C
+
+//--- Extension mode for use in begin()
+#define HT1632_EXT_VERTICAL 0
+#define HT1632_EXT_HORIZONTAL 1
 
 class HT1632 {
 
@@ -37,6 +46,8 @@ class HT1632 {
   
   void clrPixel(uint16_t i);
   void setPixel(uint16_t i);
+  void clrPixel(uint8_t x, uint8_t y);
+  void setPixel(uint8_t x, uint8_t y);
 
   void blink(boolean state);
   void setBrightness(uint8_t pwm);
@@ -46,10 +57,18 @@ class HT1632 {
   void writeScreen();
   void dumpScreen();
   
+  uint8_t width() const;
+  uint8_t height() const;
+  
  private:
   int8_t WIDTH, HEIGHT;
   int8_t _data, _cs, _wr, _rd;
-  uint8_t ledmatrix[48];     // 16 * 24 / 8
+  
+  // There are two configurations: 16 * 24, and 8 * 32.
+  // So we choose the larger one.
+  // Maths: (screen size) / sizeof(uint8_t) = (16 / 24) / 8
+  uint8_t ledmatrix[48];
+  
   void sendcommand(uint8_t c);
   void writedata(uint16_t d, uint8_t bits);
   void writeRAM(uint8_t addr, uint8_t data);
@@ -64,7 +83,7 @@ class HT1632LEDMatrix : public Print {
   HT1632LEDMatrix(uint8_t data, uint8_t wr, uint8_t cs1, 
 		  uint8_t cs2, uint8_t cs3, uint8_t cs4);
 
- void begin(uint8_t type);
+ void begin(uint8_t type, uint8_t extension = HT1632_EXT_HORIZONTAL);
  void clearScreen(void);
  void fillScreen(void);
  void blink(boolean b);
