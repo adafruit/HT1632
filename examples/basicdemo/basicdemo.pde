@@ -1,4 +1,5 @@
-#include "HT1632.h"
+#include "Adafruit_GFX.h"
+#include "Adafruit_HT1632.h"
 
 /* 
 This is a basic demo program showing how to write to a HT1632
@@ -7,22 +8,21 @@ and using only 3 pins - data, write and select.
 Multiple HT1632's can share data and write pins, but need unique CS pins.
 */
 
-#define DATA 2
-#define WR 3
-#define CS 4
+#define HT_DATA 2
+#define HT_WR 3
+#define HT_CS 4
 
-HT1632 matrix = HT1632(DATA, WR, CS);
+Adafruit_HT1632 matrix = Adafruit_HT1632(HT_DATA, HT_WR, HT_CS);
 
 void setup() {
   Serial.begin(9600);
-  matrix.begin(HT1632_COMMON_16NMOS);
+  matrix.begin(ADA_HT1632_COMMON_16NMOS);
   
   delay(100);
   matrix.clearScreen();
-
 }
 
-void testMatrix(HT1632 matrix) {
+void testMatrix(Adafruit_HT1632 matrix) {
   for (int i=0; i<24*16; i++) {
     matrix.setPixel(i);
     matrix.writeScreen();
