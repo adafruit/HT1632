@@ -11,6 +11,10 @@ Adafruit_HT1632LEDMatrix matrix = Adafruit_HT1632LEDMatrix(HT_DATA, HT_WR, HT_CS
 //Adafruit_HT1632LEDMatrix matrix = Adafruit_HT1632LEDMatrix(HT_DATA, HT_WR, HT_CS, HT_CS2);
 
 void setup() {
+  pinMode(HT_DATA, OUTPUT);
+  pinMode(HT_WR, OUTPUT);
+  pinMode(HT_CS, OUTPUT);
+  pinMode(HT_CS2, OUTPUT);
   Serial.begin(9600);
   matrix.begin(ADA_HT1632_COMMON_16NMOS);  
   matrix.fillScreen();
