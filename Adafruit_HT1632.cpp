@@ -61,6 +61,21 @@ void Adafruit_HT1632LEDMatrix::clrPixel(uint8_t x, uint8_t y) {
 void Adafruit_HT1632LEDMatrix::drawPixel(int16_t x, int16_t y, uint16_t color) {
   if((x < 0) || (x >= _width) || (y < 0) || (y >= _height)) return;
 
+  switch(rotation) {
+    case 1:
+      ht1632swap(x, y)
+      x = _height - 1 - x;
+      break;
+    case 2:
+      x = _width - 1 - x;
+      y = _height - 1 - y;
+      break;
+    case 3:
+      ht1632swap(x, y)
+      y = _width - 1 - y;
+      break;
+  }
+
   uint8_t m;
   // figure out which matrix controller it is
   m = x / 24;
