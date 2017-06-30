@@ -13,25 +13,24 @@ Adafruit_HT1632LEDMatrix matrix = Adafruit_HT1632LEDMatrix(HT_DATA, HT_WR, HT_CS
 
 void setup() {
   Serial.begin(9600);
-  matrix.begin(ADA_HT1632_COMMON_16NMOS);  
+  matrix.begin(ADA_HT1632_COMMON_16NMOS);
   matrix.fillScreen();
   delay(500);
-
 }
 
 void loop() {
-  matrix.clearScreen(); 
+  matrix.clearScreen();
    // draw a pixel!
   matrix.drawPixel(0, 0, 1);
   matrix.writeScreen();
-  
+
   delay(500);
    // clear a pixel!
-  matrix.drawPixel(0, 0, 0); 
+  matrix.drawPixel(0, 0, 0);
   matrix.writeScreen();
-  
+
   // draw a big rect on the screen
-  matrix.fillRect(matrix.width()/4, matrix.height()/4, 
+  matrix.fillRect(matrix.width()/4, matrix.height()/4,
                   matrix.width()/2, matrix.height()/2, 1);
   matrix.writeScreen();
   delay(500);
@@ -40,9 +39,9 @@ void loop() {
   matrix.drawRect(0, 0, matrix.width(), matrix.height(), 1);
   matrix.writeScreen();
   delay(500);
-  
+
   // draw an 'X' in red
-  matrix.clearScreen(); 
+  matrix.clearScreen();
   matrix.drawLine(0, 0, matrix.width()-1, matrix.height()-1, 1);
   matrix.drawLine(matrix.width()-1, 0, 0, matrix.height()-1, 1);
   matrix.writeScreen();
@@ -57,8 +56,8 @@ void loop() {
   matrix.drawCircle(matrix.width()/2-1, matrix.height()/2-1, 4, 0);
   matrix.writeScreen();
   delay(500);
-  
-  matrix.clearScreen(); 
+
+  matrix.clearScreen();
   // draw some text!
   matrix.setTextSize(1);    // size 1 == 8 pixels high
   matrix.setTextColor(1);   // 'lit' LEDs
@@ -67,7 +66,7 @@ void loop() {
   matrix.setCursor(0, 0);   // start at top left, with one pixel of spacing
   matrix.print("AdafruitIndustries");
   matrix.writeScreen();
-  
+
   delay(2000);
 
   // whew!

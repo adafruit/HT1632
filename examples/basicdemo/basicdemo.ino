@@ -1,7 +1,7 @@
 #include "Adafruit_GFX.h"
 #include "Adafruit_HT1632.h"
 
-/* 
+/*
 This is a basic demo program showing how to write to a HT1632
 These can be used for up to 16x24 LED matrix grids, with internal memory
 and using only 3 pins - data, write and select.
@@ -17,7 +17,7 @@ Adafruit_HT1632 matrix = Adafruit_HT1632(HT_DATA, HT_WR, HT_CS);
 void setup() {
   Serial.begin(9600);
   matrix.begin(ADA_HT1632_COMMON_16NMOS);
-  
+
   delay(100);
   matrix.clearScreen();
 }
@@ -27,13 +27,13 @@ void testMatrix(Adafruit_HT1632 matrix) {
     matrix.setPixel(i);
     matrix.writeScreen();
   }
-  
+
   // blink!
   matrix.blink(true);
   delay(2000);
   matrix.blink(false);
-  
-  // Adjust the brightness down 
+
+  // Adjust the brightness down
   for (int8_t i=15; i>=0; i--) {
    matrix.setBrightness(i);
    delay(100);
