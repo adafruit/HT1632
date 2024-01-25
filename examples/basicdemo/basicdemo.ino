@@ -15,6 +15,9 @@ Multiple HT1632's can share data and write pins, but need unique CS pins.
 Adafruit_HT1632 matrix = Adafruit_HT1632(HT_DATA, HT_WR, HT_CS);
 
 void setup() {
+  pinMode(HT_DATA, OUTPUT);
+  pinMode(HT_WR, OUTPUT);
+  pinMode(HT_CS, OUTPUT);  
   Serial.begin(9600);
   matrix.begin(ADA_HT1632_COMMON_16NMOS);
 
